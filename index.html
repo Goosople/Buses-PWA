@@ -77,7 +77,7 @@
                 scheduleData = await res.json();
                 updateDisplay();
             } catch (err) {
-                console.log('Using cached data');
+                console.log(err);
             }
         }
 
@@ -87,32 +87,29 @@
             const timetable = document.getElementById('timetable');
             timetable.innerHTML = '';
 
-            [1, 2].forEach(busNum => {
-                const busData = scheduleData[`bus${busNum}`];
-                const times = busNum === 1 ?
-                    busData : now.getDay() in [0, 6] ?
-                        null : busData[now.getDay() - 1];
+            Object.keys(scheduleData).forEach(direction => {
+                scheduleData[direction].forEach((bus, busNum) => {
+                    bus.forEach((times, day) => {
+                        if (now.getDay() === day + 1 || busNum === 0) {
+                            const nextTime = times.find(t =>
+                                t > now.toTimeString().substr(0, 5)
+                            ) || times[0];
 
-                if (times != null) {
-                    Object.keys(times).forEach(direction => {
-                        const nextTime = times[direction].find(t =>
-                            t > now.toTimeString().substr(0, 5)
-                        ) || times[direction][0];
-
-                        const card = document.createElement('div');
-                        card.className = 'card';
-                        card.innerHTML = `
-                        <h3>Bus ${busNum} From ${direction}</h3>
-                        <div class="next-bus">Next: ${nextTime}</div>
-                        <div class="time-list">
-                            ${times[direction].map(t =>
-                            `<div class="time-item">${t}</div>`
-                        ).join('')}
-                        </div>
-                        `;
-                        timetable.appendChild(card);
+                            const card = document.createElement('div');
+                            card.className = 'card';
+                            card.innerHTML = `
+                                <h3>Bus ${busNum + 1} From ${direction}</h3>
+                                <div class="next-bus">Next: ${nextTime}</div>
+                                <div class="time-list">
+                                    ${times.map(t =>
+                                `<div class="time-item">${t}</div>`
+                            ).join('')}
+                                </div>
+                            `;
+                            timetable.appendChild(card);
+                        }
                     });
-                }
+                });
             });
         }
 
