@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shuttle Bus Timetable</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+        }
+
+        body {
+            font-family: system-ui;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px 0;
+        }
+
+        .next-bus {
+            color: white;
+            background: var(--secondary);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .time-list {
+            margin-top: 10px;
+        }
+
+        .time-item {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #1a1a1a;
+                color: white;
+            }
+
+            .card {
+                background: #2d2d2d;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Shuttle Bus Timetable</h1>
+    <div id="status" class="card"></div>
+    <div id="timetable"></div>
+
+    <script>
+        // 注册Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker registered'))
+                .catch(err => console.log('Registration failed:', err));
+        }
+
+        // 获取时刻表数据
+        let scheduleData = null;
+
+        async function loadSchedule() {
+            try {
+                const res = await fetch('buses.json');
+                scheduleData = await res.json();
+                updateDisplay();
+            } catch (err) {
+                console.log('Using cached data');
+            }
+        }
+
+        // 显示最近班次
+        function updateDisplay() {
+            const now = new Date();
+            const timetable = document.getElementById('timetable');
+            timetable.innerHTML = '';
+
+            [1, 2].forEach(busNum => {
+                const busData = scheduleData[`bus${busNum}`];
+                const times = busNum === 1 ?
+                    busData : now.getDay() in [0, 6] ?
+                        null : busData[now.getDay() - 1];
+
+                if (times != null) {
+                    Object.keys(times).forEach(direction => {
+                        const nextTime = times[direction].find(t =>
+                            t > now.toTimeString().substr(0, 5)
+                        ) || times[direction][0];
+
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        card.innerHTML = `
+                        <h3>Bus ${busNum} From ${direction}</h3>
+                        <div class="next-bus">Next: ${nextTime}</div>
+                        <div class="time-list">
+                            ${times[direction].map(t =>
+                            `<div class="time-item">${t}</div>`
+                        ).join('')}
+                        </div>
+                        `;
+                        timetable.appendChild(card);
+                    });
+                }
+            });
+        }
+
+        // 初始化
+        loadSchedule();
+        setInterval(updateDisplay, 60000); // 每分钟更新
+    </script>
+</body>
+
+</html>
