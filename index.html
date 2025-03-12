@@ -35,6 +35,8 @@
 
         .time-list {
             margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
         }
 
         .time-item {
@@ -50,6 +52,20 @@
 
             .card {
                 background: #2d2d2d;
+            }
+        }
+
+        @media (min-width: 768px) {
+            #timetable {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            #timetable {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
             }
         }
     </style>
