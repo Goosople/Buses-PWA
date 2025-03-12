@@ -1,7 +1,7 @@
 {
-    "name": "Shuttle Timetable",
-    "short_name": "Shuttle",
-    "start_url": "/",
+    "name": "Shuttle Buses Timetable",
+    "short_name": "Buses",
+    "start_url": "/Buses-PWA",
     "display": "standalone",
     "background_color": "#2c3e50",
     "theme_color": "#3498db",

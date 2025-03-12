@@ -1,0 +1,69 @@
+:root {
+    --primary: #2c3e50;
+    --secondary: #3498db;
+}
+
+body {
+    font-family: system-ui;
+    margin: 0;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 10px;
+}
+
+.next-bus-box {
+    color: white;
+    background: var(--secondary);
+    padding: 12px 15px;
+    border-radius: 8px;
+}
+
+.next-bus {
+    font-weight: bold;
+}
+
+.past-bus {
+    color: gray;
+}
+
+.time-list {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.time-item {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #1a1a1a;
+        color: white;
+    }
+
+    .card {
+        background: #2d2d2d;
+    }
+}
+
+@media (min-width: 768px) {
+    #timetable {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 1280px) {
+    #timetable {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
