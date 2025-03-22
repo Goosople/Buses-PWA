@@ -49,11 +49,19 @@
                     bus.forEach((times, day) => {
                         if (now.getDay() === day + 1 || busNum === 0) {
                             const nextTime = times.find(t => getDate(t) > now);
+                            
+                            const timeLeft = nextTime ? new Date(getDate(nextTime) - now) : null;
+                            const timeLeftFormatted = timeLeft 
+                                ? `${timeLeft.getMinutes()}:${timeLeft.getSeconds().toString().padStart(2, '0')}`
+                                : null;
+
                             const card = document.createElement('div');
                             card.className = 'card';
                             card.innerHTML = `
                         <h3>Bus ${busNum + 1} ${direction.replace('To', ' → ')}</h3>
-                        <div class="next-bus-box">Next: ${nextTime || 'No next bus today'}</div>
+                        <div class="next-bus-box ${nextTime ? 'next-bus-active' : 'next-bus-inactive'}">
+                            ${nextTime ? `Remaining: ${timeLeftFormatted}` :'No next bus today'}
+                        </div>
                         <div class="time-list">
                             ${times.map(t =>
                                 `<div class="time-item ${getDate(t) < now ?
