@@ -19,9 +19,16 @@ body {
 
 .next-bus-box {
     color: white;
-    background: var(--secondary);
     padding: 12px 15px;
     border-radius: 8px;
+}
+
+.next-bus-active {
+    background: var(--secondary);
+}
+
+.next-bus-inactive {
+    background: #444444;
 }
 
 .next-bus {
@@ -41,6 +48,10 @@ body {
 .time-item {
     padding: 5px 0;
     border-bottom: 1px solid #eee;
+}
+
+.title {
+    margin-left: 10px;
 }
 
 @media (prefers-color-scheme: dark) {
