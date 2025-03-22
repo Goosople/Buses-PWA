@@ -43,6 +43,10 @@ body {
     border-bottom: 1px solid #eee;
 }
 
+.title {
+    margin-left: 10px;
+}
+
 @media (prefers-color-scheme: dark) {
     body {
         background: #1a1a1a;
